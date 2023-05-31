@@ -2,6 +2,7 @@ import yaml
 from sqlalchemy.engine import create_engine
 from sqlalchemy import inspect
 import pandas as pd
+import pymysql
 
 '''
 read_db_creds()
@@ -40,9 +41,7 @@ class DatabaseConnector:
         inspector = inspect(engine)
         return inspector.get_table_names()
     
-    def upload_to_df(self, df, table_name):
+    def upload_to_db(self, df, table_name):
         engine = self.init_db_engine()
-        uploaded_df = df.to_sql(name=table_name, con=engine, if_exists='replace', index=False)
-        print(uploaded_df)
-
+        df.to_sql(name=table_name, con=engine)
 
