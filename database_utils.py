@@ -24,24 +24,30 @@ class DatabaseConnector:
 
     def read_db_creds(self, file):
         with open(file, 'r') as file:
-            credentials = yaml.safe_load(file)
-        return credentials
+            credential = yaml.safe_load(file)
+        return credential
             
     def init_db_engine(self):
-        credentials = self.read_db_creds("db_creds.yaml")
-      
+        credential = self.read_db_creds("db_creds.yaml")
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'  
-        engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{credentials['RDS_USER']}:{credentials['RDS_PASSWORD']}@{credentials['RDS_HOST']}:{credentials['RDS_PORT']}/{credentials['RDS_DATABASE']}")
+        engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{credential['RDS_USER']}:{credential['RDS_PASSWORD']}@{credential['RDS_HOST']}:{credential['RDS_PORT']}/{credential['RDS_DATABASE']}")
         engine.connect()
         return engine
     
     def list_db_tables(self):
+        credential = self.read_db_creds("db_creds.yaml")
         engine = self.init_db_engine()
         inspector = inspect(engine)
         return inspector.get_table_names()
     
     def upload_to_db(self, df, table_name):
-        engine = self.init_db_engine()
-        df.to_sql(name=table_name, con=engine)
+        credential = self.read_db_creds("my_db_creds.yaml")
+        DATABASE_TYPE = 'postgresql'
+        DBAPI = 'psycopg2'  
+        engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{credential['RDS_USER']}:{credential['RDS_PASSWORD']}@{credential['RDS_HOST']}:{credential['RDS_PORT']}/{credential['RDS_DATABASE']}")
+        engine.connect()
+        df.to_sql(name=table_name, con=engine, if_exists='replace', index=False)
+        return engine
+
 

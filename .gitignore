@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 
 db_creds.yaml
+my_db_creds.yaml
