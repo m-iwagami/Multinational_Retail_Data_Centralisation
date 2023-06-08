@@ -11,8 +11,6 @@ credential = 'my_db_creds.yaml'
 engine = db_con.init_db_engine()
 
 print(db_con.list_db_tables())
-user_df = db_ex.read_rds_table('legacy_users',db_con)
-#user_df.to_string('users.csv') #To see the data in a file
 
 #cleaned_db = db_cleaning.clean_user_data(user_df)
 #cleaned_db.to_string('cleaned_users.txt')
@@ -38,9 +36,30 @@ user_df = db_ex.read_rds_table('legacy_users',db_con)
 #clean_store_df.to_string('clean_store.txt')
 #upload_df = db_con.upload_to_db(clean_store_df,'dim_store_details')
 
+#s3_address = 's3://data-handling-public/products.csv'
+#df = db_ex.extract_from_s3(s3_address)
+#df.to_string('products.txt')
+
+#clean_product_df = db_cleaning.clean_products_data(df)
+#clean_product_df = clean_product_df.drop(columns=['Unnamed: 0'])
+#clean_product_df.to_string('clean_products.txt')
+#upload_df = db_con.upload_to_db(clean_product_df,'dim_products')
+
+user_df = db_ex.read_rds_table('orders_table',db_con)
+user_df.to_string('orders.csv') #To see the data in a file
+#clean_order_df = db_cleaning.clean_orders_data(user_df)
+
+#clean_order_df = user_df.drop(columns=['1','first_name','last_name'])
+#clean_order_df.to_string('clean_order_data.txt')
+#upload_df = db_con.upload_to_db(clean_order_df,'orders_table')
+
 s3_address = 's3://data-handling-public/products.csv'
 df = db_ex.extract_from_s3(s3_address)
 df.to_string('products.txt')
 
-clean_product_df = db_cleaning.clean_products_data(df)
-clean_product_df.to_string('clean_products.txt')
+store_data = db_ex.retrieve_json_data()
+clean_store_data = db_cleaning.clean_data_details(store_data)
+#clean_store_data.to_string('data.csv')
+upload_df = db_con.upload_to_db(clean_store_data,'dim_date_times')
+
+

@@ -43,8 +43,15 @@ class DataCleaning:
         df = df.dropna()
         df = self.clean_price(df,'product_price')
         df['date_added'] = self.fixing_date(df, 'date_added')
+        df = self.clean_ean_number(df, 'EAN')
         df = self.convert_product_weights(df, 'weight')
 
+        return df
+    
+    def clean_data_details(self, df):
+        df = df.replace(['Nan','NULL'], np.nan)
+        df = df.dropna()
+        df = self.clean_numbers(df,'month')
         return df
     
 
@@ -127,26 +134,26 @@ class DataCleaning:
         clean_price = df[column].str.match(pattern, na=False)
         return df[clean_price]
 
-    def clean_weights_cal(self, df, column):
-        df[['quantity', 'unit']] = df[column].str.split(' x ', expand=True)
-        df['quantity'] = pd.to_numeric(df['quantity'], errors='coerce')
-        unit_mapping = {'g': 0.001, 'kg':1, 'oz':0.02835}
-        df[column] = df[column].map(unit_mapping)
-        #df['weight_in_g'] = df['quantity'] * df['unit']
-        #df = df['weight_in_g']
+    def clean_ean_number(self, df, column):
+        df = df[df[column].str.len() ==13]
         return df
+
+
 
     def convert_product_weights(self, df, column):
-        unit_mapping = {'g': 0.001, 'kg': 1, 'oz': 0.02835}
+        kg_rows = df[column].str.match(r'^\d+(\.\d+)?\s*kg$')
+        g_rows = df[column].str.match(r'^\d+(\.\d+)?\s*g$')
+        ml_rows = df[column].str.endswith('ml')
+        
+        df[column] = df[column].str.replace('[^\d.]', '', regex=True)
+        df[column] = df[column].astype(float)
 
-        df[['quantity', 'unit']] = df[column].str.split(' x ', expand=True)
-        df['quantity'] = pd.to_numeric(df['quantity'], errors='coerce')
-        df['unit'] = df['unit'].str.strip()
-
-        df['weight_in_kg'] = df.apply(lambda row: row['quantity'] * unit_mapping.get(row['unit'], np.nan), axis=1)
-        df['weight_in_kg'] = df['weight_in_kg'].fillna(df[column].apply(lambda x: unit_mapping.get(x, np.nan)))
-
+        df.loc[ml_rows, column] = df.loc[ml_rows, column] / 1000
+        df.loc[g_rows, column] = df.loc[g_rows, column] / 1000
+        df.loc[kg_rows, column] = df.loc[kg_rows, column]
         return df
 
+    def clean_orders_data(self,df):
+        return df
 
 

@@ -60,5 +60,20 @@ class DataExtractor:
         data = response['Body'].read().decode('utf-8')
         df = pd.read_csv(io.StringIO(data))
         return df
+    
+    def retrieve_json_data(self):
+        retrive_a_data_url = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/date_details.json'
+        headers = {'x-api-key': 'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'}
+        url = retrive_a_data_url
+        retrive_json_data = requests.get(url, headers=headers)
 
+        if retrive_json_data.status_code == 200:
+            retrive_json_data = retrive_json_data.json()
+            retrive_json_data = pd.DataFrame(retrive_json_data)
+            return retrive_json_data
+        else:
+            print(f'Error:{retrive_json_data.text}')
+            return None
+
+    
 
