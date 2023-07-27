@@ -15,10 +15,10 @@ class DataCleaning:
         df = self.clean_letters(df, 'last_name')
         df = self.clean_letters(df, 'country')
         df = self.clean_country_code(df, 'country_code')
-        df = self.clean_email(df, 'email_address')
+        #df = self.clean_email(df, 'email_address')
         df['date_of_birth'] = self.fixing_date(df,'date_of_birth')
         df['join_date'] = self.fixing_date(df,'join_date')
-
+##
         df = self.clean_uuid(df, 'user_uuid')
         df = self.clean_phone_number(df, 'phone_number','country_code')
         #df = self.clean_address(df, 'address')
@@ -83,10 +83,11 @@ class DataCleaning:
     def clean_letters(self, df, column):
         df = df.replace(['Nan','NULL','N/A'], np.nan)
         df[column] = df[column].astype(str)
-        return df[df[column].str.contains(r'^[a-zA-Z\s-]*$', na=False)]
+        return df[df[column].str.contains(r'^[a-zA-ZÄÖÜäöüßé\s\.\-\']*$', na=False)]
         
 
     def clean_country_code(self, df, column):
+        df[column] = df[column].str.replace('GGB','GB')
         country_code = r'\b[A-Z]{2}\b'
         return df[df[column].str.match(country_code, na=False)]
 
@@ -119,9 +120,11 @@ class DataCleaning:
         return df
 
 
-    def clean_email(self, df, columns):
-        regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
-        return df[df[columns].str.match(regex, na=False)]
+    def clean_email(self, df, column):
+        df[column] = df[column].astype(str)
+        email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+        return df[df[column].str.match(email_pattern, na=False)]
+
 
     #def clean_address(self, df, column):
      #   return df[df[column].apply(lambda x: pd.notna(x) and re.match(r'^[a-zA-Z0-9\s\.\,\\\ä\ö\ü\ß]+$', x) is not None)]
