@@ -15,12 +15,11 @@ class DataCleaning:
         df = self.clean_letters(df, 'last_name')
         df = self.clean_letters(df, 'country')
         df = self.clean_country_code(df, 'country_code')
-        #df = self.clean_email(df, 'email_address')
         df['date_of_birth'] = self.fixing_date(df,'date_of_birth')
         df['join_date'] = self.fixing_date(df,'join_date')
-##
         df = self.clean_uuid(df, 'user_uuid')
         df = self.clean_phone_number(df, 'phone_number','country_code')
+        #df = self.clean_email(df, 'email_address')
         #df = self.clean_address(df, 'address')
         return df
 
@@ -28,7 +27,6 @@ class DataCleaning:
     def called_clean_store_data(self,df):
 
         df = df[df['store_code'] != 'NULL']
-        #df = self.clean_code(df, 'store_code')
         df = self.clean_country_code(df, 'country_code')
         df['opening_date'] = self.fixing_date(df,'opening_date')
         
@@ -39,8 +37,9 @@ class DataCleaning:
         df = self.clean_longitude(df, 'longitude')
 
         df = self.clean_numbers(df, 'staff_numbers')
-        #df = self.clean_address(df, 'address')
         df = pd.DataFrame(df)
+        #df = self.clean_code(df, 'store_code')
+        #df = self.clean_address(df, 'address')
         return df
 
 
@@ -67,11 +66,6 @@ class DataCleaning:
         df[column] = df[column].str.replace('?','')
         card_pattern = r'^[0-9]{9,20}'
         return df[df[column].str.match(card_pattern, na=False)]
-
-
-        #df[column] = df[column].match(card_pattern)
-        #df = df[df['card_number'].str.len().between(12,19)]
-        #df['expiry_date'] = pd.to_datetime(df['expiry_date'], format='%m/%d', errors='coerce')
     
     def clean_data_details(self, df):
         df = df.replace(['Nan','NULL','N/A'], np.nan)
@@ -127,17 +121,12 @@ class DataCleaning:
 
 
     #def clean_address(self, df, column):
-     #   return df[df[column].apply(lambda x: pd.notna(x) and re.match(r'^[a-zA-Z0-9\s\.\,\\\ä\ö\ü\ß]+$', x) is not None)]
+        return df[df[column].apply(lambda x: pd.notna(x) and re.match(r'^[a-zA-Z0-9\s\.\,\\\ä\ö\ü\ß]+$', x) is not None)]
 
  
-    def clean_address(self, df, column):
-        # Create a copy of the DataFrame to avoid modifying the original data
+    #def clean_address(self, df, column):
         cleaned_df = df.copy()
-
-        # Initialize the Nominatim geocoder
         geolocator = Nominatim(user_agent="address_cleaner")
-
-        # Clean the address column
         for index, address in enumerate(cleaned_df[column]):
             if pd.notna(address):
                 location = geolocator.geocode(address, addressdetails=True, language="en")
@@ -145,7 +134,6 @@ class DataCleaning:
                     address_parts = location.raw['address']
                     cleaned_address = ', '.join(filter(lambda x: x.strip(), [address_parts.get('road', ''), address_parts.get('house_number', ''), address_parts.get('city', ''), address_parts.get('state', ''), address_parts.get('postcode', ''), address_parts.get('country', '')]))
                     cleaned_df.at[index, column] = cleaned_address
-
         return cleaned_df
 
 

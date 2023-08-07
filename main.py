@@ -49,7 +49,7 @@ upload_df = db_con.upload_to_db(cleaned_db,'dim_users')
 #upload_df = db_con.upload_to_db(clean_product_df,'dim_products')
 
 
-
+#ORDER
 #user_df = db_ex.read_rds_table('orders_table',db_con)
 #user_df.to_string('original_orders_table.txt')
 #clean_order_df = db_cleaning.clean_orders_data(user_df)
@@ -58,6 +58,7 @@ upload_df = db_con.upload_to_db(cleaned_db,'dim_users')
 #upload_df = db_con.upload_to_db(clean_order_df,'orders_table')
 
 
+#DATE
 #store_data = db_ex.retrieve_json_data()
 #clean_store_data = db_cleaning.clean_data_details(store_data)
 #clean_store_data.to_string('cleaned_date_data.txt')
