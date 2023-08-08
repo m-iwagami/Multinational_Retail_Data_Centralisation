@@ -9,7 +9,7 @@ db_cleaning = DataCleaning()
 
 credential = 'my_db_creds.yaml'
 engine = db_con.init_db_engine()
-print(db_con.list_db_tables())
+#print(db_con.list_db_tables())
 
 # USERS
 user_data_df = db_ex.read_rds_table('legacy_users',db_con)

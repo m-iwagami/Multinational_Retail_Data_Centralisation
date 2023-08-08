@@ -13,8 +13,10 @@ init_db_engine()
 To Initialize database engine 
 return sqlalchemy.engine.base.Engine
 
-list_db_tables
+list_db_tables()
 To list tables in the database
+
+
 '''
 
 
