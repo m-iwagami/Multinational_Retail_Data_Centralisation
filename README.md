@@ -19,8 +19,7 @@ DataCleaning
 - main.py
 
 - db_creds.yaml & my_db_creds.yaml
-containing the database credentials
-These files are in .gitignore, so they are not in my public GitHub repository.
+    - containing the database credentials. These files are in .gitignore, so they are not in my public GitHub repository.
 
 
 
