@@ -16,7 +16,8 @@ This project is from a multinational company that sells various goods across the
 
 ## Modules
 
-- database_utils.py: This is DatabaseConnector class that contains four mothods for connecting with and upload data to the database.
+### database_utils.py: 
+This is DatabaseConnector class that contains four mothods for connecting with and upload data to the database.
 
 1. read_db_creds: To read the credentials yaml file and return a dictionary of the credentials
 2. init_db_engine: To read the credentials from the return of read_db_creds and initialise and return an sqlalchemy database engine
