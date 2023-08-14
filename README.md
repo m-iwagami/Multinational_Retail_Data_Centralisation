@@ -19,10 +19,10 @@ This project is from a multinational company that sells various goods across the
 - database_utils.py
     - This is DatabaseConnector class that contains four mothods for connecting with and upload data to the database.
 
-    1. read_db_creds: To read the credentials yaml file and return a dictionary of the credentials
-    2. init_db_engine: To read the credentials from the return of read_db_creds and initialise and return an sqlalchemy database engine
-    3. list_db_tables: To list all the tables in the database
-    4. upload_to_db: This method will take in a Pandas DataFrame and table name to upload to as an argument
+1. read_db_creds: To read the credentials yaml file and return a dictionary of the credentials
+2. init_db_engine: To read the credentials from the return of read_db_creds and initialise and return an sqlalchemy database engine
+3. list_db_tables: To list all the tables in the database
+4. upload_to_db: This method will take in a Pandas DataFrame and table name to upload to as an argument
 
 
 - data_extraction.py
