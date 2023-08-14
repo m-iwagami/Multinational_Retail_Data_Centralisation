@@ -16,8 +16,7 @@ This project is from a multinational company that sells various goods across the
 
 ## Modules
 
-- database_utils.py
-    - This is DatabaseConnector class that contains four mothods for connecting with and upload data to the database.
+- database_utils.py: This is DatabaseConnector class that contains four mothods for connecting with and upload data to the database.
 
 1. read_db_creds: To read the credentials yaml file and return a dictionary of the credentials
 2. init_db_engine: To read the credentials from the return of read_db_creds and initialise and return an sqlalchemy database engine
@@ -25,8 +24,7 @@ This project is from a multinational company that sells various goods across the
 4. upload_to_db: This method will take in a Pandas DataFrame and table name to upload to as an argument
 
 
-- data_extraction.py
-    - This file is a DataExtractor Class that contains methods that help extract data from different data sources such as CSV files, an API and an S3 bucket
+- data_extraction.py: This file is a DataExtractor Class that contains methods that help extract data from different data sources such as CSV files, an API and an S3 bucket
 1. read_rds_table: extracts the database table to a pandas DataFrame
 2. retrieve_pdf_data: takes in a link as an argument and returns a pandas DataFrame
 3. list_number_of_stores: returns the number of stores to extract
@@ -35,12 +33,11 @@ This project is from a multinational company that sells various goods across the
 6. retrieve_json_data(self): extract data from json file stored on S3
 
 
-- data_cleaning.py
-    - This is a DataCleaning Class that performs that cleaning of the data 
+- data_cleaning.py: This is a DataCleaning Class that performs that cleaning of the data 
 
-1. clean_user_data: Clean users data
-2. called_clean_store_data: Clean store data
-3. clean_products_data: Clean product data
+1. clean_user_data: 
+2. called_clean_store_data: 
+3. clean_products_data: 
 4. clean_card_data:
 5. clean_card_number:
 6. clean_data_details:
@@ -63,11 +60,9 @@ This project is from a multinational company that sells various goods across the
 23. clean_orders_data
 
 
-- main.py
-    - This file executes the code from the three remaining files. It calls DataExtract and DataConnect classes to extract the original data, DataClean class to clean it and DataConnect again to upload them to a local postgres dataframe.
+- main.py: This file executes the code from the three remaining files. It calls DataExtract and DataConnect classes to extract the original data, DataClean class to clean it and DataConnect again to upload them to a local postgres dataframe.
 
-- db_creds.yaml & my_db_creds.yaml
-    - containing the database credentials. These files are in .gitignore, so they are not in my public GitHub repository.
+- db_creds.yaml & my_db_creds.yaml: containing the database credentials. These files are in .gitignore, so they are not in my public GitHub repository.
 
 
 
