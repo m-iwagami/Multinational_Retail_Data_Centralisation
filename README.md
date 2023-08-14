@@ -32,7 +32,7 @@ This file is a DataExtractor Class that contains methods that help extract data 
 3. list_number_of_stores: returns the number of stores to extract
 4. retrieve_stores_data: takes the retrieve a store endpoint as an argument and extracts all the stores from the API saving them in a pandas DataFrame.
 5. extract_from_s3: uses the boto3 package to download and extract the information returning a pandas DataFrame.
-6. retrieve_json_data(self): extract data from json file stored on S3
+6. retrieve_json_data: extract data from json file stored on S3
 
 
 #### data_cleaning.py: 
@@ -48,7 +48,6 @@ This is a DataCleaning Class that performs that cleaning of the data
 9. fixing_date:
 10. clean_phone_number:
 11. clean_email:
-12. clean_address:
 13. clean_address:
 14. clean_uuid:
 15. clean_code:
