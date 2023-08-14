@@ -1,10 +1,11 @@
 import pandas as pd
 import numpy as np
+import re
+
 from geopy.geocoders import Nominatim
 
 from data_extraction import DataExtractor
 from database_utils import DatabaseConnector
-import re
 
 class DataCleaning:
     
@@ -118,11 +119,6 @@ class DataCleaning:
         df[column] = df[column].astype(str)
         email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
         return df[df[column].str.match(email_pattern, na=False)]
-
-
-    #def clean_address(self, df, column):
-        return df[df[column].apply(lambda x: pd.notna(x) and re.match(r'^[a-zA-Z0-9\s\.\,\\\ä\ö\ü\ß]+$', x) is not None)]
-
  
     #def clean_address(self, df, column):
         cleaned_df = df.copy()
@@ -135,7 +131,7 @@ class DataCleaning:
                     cleaned_address = ', '.join(filter(lambda x: x.strip(), [address_parts.get('road', ''), address_parts.get('house_number', ''), address_parts.get('city', ''), address_parts.get('state', ''), address_parts.get('postcode', ''), address_parts.get('country', '')]))
                     cleaned_df.at[index, column] = cleaned_address
         return cleaned_df
-
+        return df[df[column].apply(lambda x: pd.notna(x) and re.match(r'^[a-zA-Z0-9\s\.\,\\\ä\ö\ü\ß]+$', x) is not None)]
 
 
     def clean_uuid(self, df, column):
