@@ -12,7 +12,8 @@ This project is from a multinational company that sells various goods across the
 
 
 ## Requirements
-- Download pgAdming4
+- pip install requirements.txt
+- python3 main.py
 
 ## Modules
 
