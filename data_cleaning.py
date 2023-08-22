@@ -10,6 +10,11 @@ from database_utils import DatabaseConnector
 class DataCleaning:
     
     def clean_user_data(self, df):
+        '''
+        To clean users dataframe
+        Takes dataframe
+        Return dataframe
+        '''
         df = df.replace(['NaN', 'NULL','NaT'], np.nan)
         df = df.dropna()
         df = self.clean_letters(df, 'first_name')
@@ -26,6 +31,11 @@ class DataCleaning:
 
     
     def called_clean_store_data(self,df):
+        '''
+        To clean store dataframe
+        Takes dataframe
+        Return dataframe
+        '''
 
         df = df[df['store_code'] != 'NULL']
         df = self.clean_country_code(df, 'country_code')
@@ -46,6 +56,11 @@ class DataCleaning:
 
     
     def clean_products_data(self, df):
+        '''
+        To clean product dataframe
+        Takes dataframe
+        Return dataframe
+        '''
         df = df.replace(['NaN', 'NULL','NaT'], np.nan)
         df = df.dropna()
     
@@ -57,40 +72,76 @@ class DataCleaning:
         return df
     
     def clean_card_data(self,df):
+        '''
+        To clean card dataframe
+        Takes dataframe
+        Return dataframe
+        '''
         df = df[df['card_number'] != 'NULL']
         df = self.clean_card_number(df, 'card_number')
         df['date_payment_confirmed'] = pd.to_datetime(df['date_payment_confirmed'], format='%Y-%m-%d', errors='coerce')
         return df
 
-    def clean_card_number(self,df,column):
-        df[column] = df[column].astype(str)
-        df[column] = df[column].str.replace('?','')
-        card_pattern = r'^[0-9]{9,20}'
-        return df[df[column].str.match(card_pattern, na=False)]
-    
     def clean_data_details(self, df):
+        '''
+        To clean store data
+        Takes dataframe
+        Return dataframe
+        '''
         df = df.replace(['Nan','NULL','N/A'], np.nan)
         df = df.dropna()
         df = self.clean_numbers(df,'month')
         return df
     
+    def clean_card_number(self,df,column):
+        '''
+        To clean card numbers
+        Takes dataframe and column
+        Return dataframe
+        '''
+        df[column] = df[column].astype(str)
+        df[column] = df[column].str.replace('?','')
+        card_pattern = r'^[0-9]{9,20}'
+        return df[df[column].str.match(card_pattern, na=False)]
+    
+    
 
     def clean_letters(self, df, column):
+        '''
+        To clean letters
+        Takes dataframe and column
+        Return dataframe
+        '''
         df = df.replace(['Nan','NULL','N/A'], np.nan)
         df[column] = df[column].astype(str)
         return df[df[column].str.contains(r'^[a-zA-ZÄÖÜäöüßé\s\.\-\']*$', na=False)]
         
 
     def clean_country_code(self, df, column):
+        '''
+        To clean country code
+        Takes dataframe and column
+        Return dataframe
+        '''
         df[column] = df[column].str.replace('GGB','GB')
         country_code = r'\b[A-Z]{2}\b'
         return df[df[column].str.match(country_code, na=False)]
 
     def fixing_date(self, df, column):
+        '''
+        To clean a column with date 
+        Takes dataframe and column
+        Return dataframe
+        '''
         return pd.to_datetime(df[column], format='%Y-%m-%d', errors='coerce')
         
 
     def clean_phone_number(self, df, phone_column, country_code_column):
+        '''
+        To clean phone numbers
+        Takes dataframe and column
+        Return dataframe
+        '''
         isd_code_map = {"GB": "+44", "DE": "+49", "US": "+1"}
 
         df[phone_column] = df[phone_column].astype(str)
@@ -116,11 +167,21 @@ class DataCleaning:
 
 
     def clean_email(self, df, column):
+        '''
+        To clean emails
+        Takes dataframe and column
+        Return dataframe
+        '''
         df[column] = df[column].astype(str)
         email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
         return df[df[column].str.match(email_pattern, na=False)]
  
     #def clean_address(self, df, column):
+        '''
+        To clean address
+        Takes dataframe and column
+        Return dataframe
+        '''
         cleaned_df = df.copy()
         geolocator = Nominatim(user_agent="address_cleaner")
         for index, address in enumerate(cleaned_df[column]):
@@ -135,37 +196,72 @@ class DataCleaning:
 
 
     def clean_uuid(self, df, column):
+        '''
+        To clean uuid
+        Takes dataframe and column
+        Return dataframe
+        '''
         df[column] = df[column].astype(str)
         id_pattern = r'^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}'
         return df[df[column].str.match(id_pattern, na=False)]
     
     
     def clean_code(self, df, column):
+        '''
+        To clean store code
+        Takes dataframe and column
+        Return dataframe
+        '''
         id_pattern = r'^[a-zA-Z]{2,3}-[a-zA-Z0-9]{6,8}'
         df[column] = np.where(df[df[column].str.match(id_pattern)], df[column], np.nan)
         return df
     
     def clean_numbers(self, df, column):
+        '''
+        To clean data without numbers
+        Takes dataframe and column
+        Return dataframe
+        '''
         df[column] = pd.to_numeric(df[column], errors='coerce')
         return df
     
 
     def clean_continent(self, df, column):
+        '''
+        To clean continent column
+        Takes dataframe and column
+        Return dataframe
+        '''
         continents = ['Asia', 'Africa', 'America', 'South America', 'Europe','Antarctica', 'Australia']
         df[column] = df[column].str.replace('eeEurope','Europe')
         df[column] = df[column].str.replace('eeAmerica','America')
         return df[df[column].isin(continents) | df[column].isnull()]
     
     def clean_latitude(self, df, column):
+        '''
+        To clean latitude
+        Takes dataframe and column
+        Return dataframe
+        '''
         df[column] = pd.to_numeric(df[column], errors='coerce')
         df[column] = np.where((df[column] >= -90), df[column], np.nan )
         return df
     
     def clean_longitude(self, df, column):
+        '''
+        To clean longtitude
+        Takes dataframe and column
+        Return dataframe
+        '''
         df[column] = pd.to_numeric(df[column], errors='coerce')
         return df[(df[column] >= -180) & (df[column] <= 180) | pd.isna(df[column])]
     
     def clean_price(seld, df, column):
+        '''
+        To clean price data
+        Takes dataframe and column
+        Return dataframe
+        '''
         pattern = r'^£(\d+(\.\d{2}))$'
         df[column] = np.where(df[column].str.match(pattern), df[column], np.nan)
         df = df.dropna(subset='product_price')
@@ -173,6 +269,11 @@ class DataCleaning:
         return df
 
     def clean_ean_number(self, df, column):
+        '''
+        To clean ean numbers
+        Takes dataframe and column
+        Return dataframe
+        '''
         df[column] = pd.to_numeric(df[column], errors='coerce')
         df[column] = np.where(len(df[column]) <= 13, df[column], np.nan)
         return df
@@ -180,6 +281,11 @@ class DataCleaning:
 
 
     def convert_product_weights(self, df, column):
+        '''
+        To clean weights and convert measurments to kg
+        Takes dataframe and column
+        Return dataframe
+        '''
         df[column] = df[column].str.replace(r'^\d+\s[x]\s\d+', '0', regex=True)
 
         kg_rows = df[column].str.match(r'^\d+(\.\d+)?\s*kg$')
@@ -195,6 +301,9 @@ class DataCleaning:
         return df
 
     def clean_orders_data(self,df):
+        '''
+        Return dataframe
+        '''
         return df
 
 
