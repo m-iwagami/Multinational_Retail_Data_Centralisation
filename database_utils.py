@@ -4,25 +4,11 @@ from sqlalchemy import inspect
 import pandas as pd
 import pymysql
 
-'''
-read_db_creds()
-To read credentials from YAML file 
-return dict
-
-init_db_engine()
-To Initialize database engine 
-return sqlalchemy.engine.base.Engine
-
-list_db_tables()
-To list tables in the database
-
-
-'''
-
 
 
 
 class DatabaseConnector:
+    '''This is DatabaseConnector class that contains four mothods for connecting with and upload data to the database.'''
 
     def read_db_creds(self, file):
         '''To read the credentials yaml file and return a dictionary of the credentials'''

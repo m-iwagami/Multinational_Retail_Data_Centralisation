@@ -8,6 +8,7 @@ from data_extraction import DataExtractor
 from database_utils import DatabaseConnector
 
 class DataCleaning:
+    '''This is a DataCleaning Class that performs that cleaning of the data '''
     
     def clean_user_data(self, df):
         '''

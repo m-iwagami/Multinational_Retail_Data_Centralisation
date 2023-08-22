@@ -10,9 +10,7 @@ import io
 
 
 class DataExtractor:
-
-    
-
+    '''This file is a DataExtractor Class that contains methods that help extract data from different data sources such as CSV files, an API and an S3 bucket'''
     def read_rds_table(self, table_name, database_connector):
         '''extracts the database table to a pandas DataFrame'''
         engine = database_connector.init_db_engine()
